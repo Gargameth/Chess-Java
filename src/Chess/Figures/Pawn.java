@@ -51,44 +51,16 @@ public class Pawn extends Chess.Figures.Figure {
                     possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1] - 1});
                     possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1]});
                     possibleEndCoords.add(new int[]{startCoords[0] + 2, startCoords[1]});
-                } else if (startCoords[1] != 0 && startCoords[1] != 7){
-                    possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1] - 1});
+                } else if (startCoords[1] == 0){
                     possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1]});
                     possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1] + 1});
-                }
-
-                if (possibleEndCoords.isEmpty()){
-                    valid = false;
-                }
-
-                if (possibleEndCoords.contains(endCoords)){
-                    if ((targetFigure.getCoordinate()[1] + 1 == startCoords[0] || targetFigure.getCoordinate()[1] - 1 == startCoords[0]) && targetFigure.getCoordinate()[0] == startCoords[0] + 1 && Objects.equals(targetFigure.getColor(), "white") && !Objects.equals(targetFigure.getType(), Chess.Figures.FigureTypes.EMPTY)){
-                        valid =  true;
-                    } else if (endCoords[0] == startCoords[0] + 2 && endCoords[1] == startCoords[1]) {
-                        if (board.selectFigure(new int[]{startCoords[0] + 1, startCoords[1]}).getType() == Chess.Figures.FigureTypes.EMPTY){
-                            valid = true;
-                        }
-                    } else valid = targetFigure.getType() == Chess.Figures.FigureTypes.EMPTY;
-                }
-            }
-            case "white" -> {
-                if (startCoords[0] == 6 && startCoords[1] != 0 && startCoords[1] != 7){
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] - 1});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] + 1});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 2, startCoords[1]});
-                } else if (startCoords[0] == 6 && startCoords[1] == 0) {
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] + 1});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 2, startCoords[1]});
-                } else if (startCoords[0] == 6 && startCoords[1] == 7) {
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] - 1});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 2, startCoords[1]});
-                } else if (startCoords[1] != 0 && startCoords[1] != 7){
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] - 1});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
-                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] + 1});
+                } else if (startCoords[1] == 7){
+                    possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1] - 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1]});
+                } else {
+                    possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1]});
+                    possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1] + 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] + 1, startCoords[1] - 1});
                 }
 
                 if (possibleEndCoords.isEmpty()){
@@ -97,13 +69,64 @@ public class Pawn extends Chess.Figures.Figure {
 
                 for (int[] coords : possibleEndCoords){
                     if (Arrays.equals(endCoords, coords)){
-                        if ((targetFigure.getCoordinate()[1] + 1 == startCoords[0] || targetFigure.getCoordinate()[1] - 1 == startCoords[0]) && targetFigure.getCoordinate()[0] == startCoords[0] - 1 && Objects.equals(targetFigure.getColor(), "black") && !Objects.equals(targetFigure.getType(), Chess.Figures.FigureTypes.EMPTY)){
-                            valid = true;
-                            break;
+                        if ((Objects.equals(targetFigure.getColor(), "white") && !Objects.equals(targetFigure.getType(), Chess.Figures.FigureTypes.EMPTY))
+                        && (targetFigure.getCoordinate()[0] == startCoords[0] + 1 && (targetFigure.getCoordinate()[1] == startCoords[1] + 1) || (targetFigure.getCoordinate()[1] == startCoords[1] - 1))){
+                            valid =  true;
                         } else if (endCoords[0] == startCoords[0] + 2 && endCoords[1] == startCoords[1]) {
                             if (board.selectFigure(new int[]{startCoords[0] + 1, startCoords[1]}).getType() == Chess.Figures.FigureTypes.EMPTY){
                                 valid = true;
-                                break;
+                            }
+                        } else valid = targetFigure.getType() == Chess.Figures.FigureTypes.EMPTY;
+                    }
+                }
+            }
+            case "white" -> {
+                // Code for the pawns sitting on their starting line. This collects the first and second fields in front of them,
+                // and the spaces to their left and right.
+                if (startCoords[0] == 6 && startCoords[1] != 0 && startCoords[1] != 7){
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] - 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] + 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 2, startCoords[1]});
+                }
+                // This checks the left most base-line pawn's available field. Checks the first and second fields
+                // in front of it, and the field to it's right.
+                else if (startCoords[0] == 6 && startCoords[1] == 0) {
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] + 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 2, startCoords[1]});
+                }
+                // This code checks the right most pawn's available spaces.
+                else if (startCoords[0] == 6 && startCoords[1] == 7) {
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] - 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 2, startCoords[1]});
+                }
+                // This should check the left most pawn's normal movement.
+                else if (startCoords[1] == 0){
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] + 1});
+                } else if (startCoords[1] == 7){
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] - 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
+                } else {
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1]});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] + 1});
+                    possibleEndCoords.add(new int[]{startCoords[0] - 1, startCoords[1] - 1});
+                }
+
+                if (possibleEndCoords.isEmpty()){
+                    valid = false;
+                }
+
+                for (int[] coords : possibleEndCoords){
+                    if (Arrays.equals(endCoords, coords)){
+                        if ((Objects.equals(targetFigure.getColor(), "black") && !Objects.equals(targetFigure.getType(), Chess.Figures.FigureTypes.EMPTY))
+                                && (targetFigure.getCoordinate()[0] == startCoords[0] - 1 && (targetFigure.getCoordinate()[1] == startCoords[1] + 1) || (targetFigure.getCoordinate()[1] == startCoords[1] - 1))){
+                            valid =  true;
+                        } else if (endCoords[0] == startCoords[0] + 2 && endCoords[1] == startCoords[1]) {
+                            if (board.selectFigure(new int[]{startCoords[0] + 1, startCoords[1]}).getType() == Chess.Figures.FigureTypes.EMPTY){
+                                valid = true;
                             }
                         } else valid = targetFigure.getType() == Chess.Figures.FigureTypes.EMPTY;
                     }
