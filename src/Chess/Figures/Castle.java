@@ -13,11 +13,6 @@ public class Castle extends Figure {
     }
 
     @Override
-    public void move(Board board, int[] startCoords, int[] endCoords) {
-
-    }
-
-    @Override
     public boolean checkMoveValidity(Board board, int[] startCoords, int[] endCoords) {
         return false;
     }

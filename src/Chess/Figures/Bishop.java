@@ -17,18 +17,6 @@ public class Bishop extends Figure {
     }
 
     @Override
-    public void move(Board board, int[] startCoords, int[] endCoords) {
-        boolean canMove = checkMoveValidity(board, startCoords, endCoords);
-        if (canMove){
-            int indexOfStart = board.getBoard().indexOf(board.selectFigure(startCoords));
-            int indexOfEnd = board.getBoard().indexOf(board.selectFigure(endCoords));
-            board.getBoard().set(indexOfEnd, this);
-            this.setCoordinate(endCoords);
-            board.getBoard().set(indexOfStart, new Empty(board, startCoords));
-        } else System.out.println("Couldn't move figure. Something went wrong. Try again.");
-    }
-
-    @Override
     public boolean checkMoveValidity(Board board, int[] startCoords, int[] endCoords) {
         if (startCoords[0] < 0 || startCoords[1] > 7 || endCoords[0] < 0 || endCoords[1] > 7){
             System.out.println("Index out of bounds error. Try with valid coords.");

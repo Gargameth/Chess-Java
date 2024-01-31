@@ -17,20 +17,6 @@ public class Pawn extends Chess.Figures.Figure {
     }
 
     @Override
-    public void move(Board board, int[] startCoords, int[] endCoords) {
-        boolean canMove = checkMoveValidity(board, startCoords, endCoords);
-        if (canMove){
-            List<Chess.Figures.Figure> piecesOnBoard = board.getBoard();
-            Chess.Figures.Figure targetFigure = board.selectFigure(endCoords);
-            int initialIndex = piecesOnBoard.indexOf(this);
-            int targetIndex = piecesOnBoard.indexOf(targetFigure);
-            this.setCoordinate(endCoords);
-            piecesOnBoard.set(targetIndex, this);
-            piecesOnBoard.set(initialIndex, new Chess.Figures.Empty(board, startCoords));
-        }
-    }
-
-    @Override
     public boolean checkMoveValidity(Board board, int[] startCoords, int[] endCoords) {
         var currentFigure = board.selectFigure(startCoords);
         var targetFigure = board.selectFigure(endCoords);

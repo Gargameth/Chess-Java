@@ -1,6 +1,5 @@
 package Chess.Figures;
 
-import Chess.Figures.FigureTypes;
 import Chess.Board;
 
 public abstract class Figure {
@@ -17,10 +16,6 @@ public abstract class Figure {
         coordinate = coord;
     }
 
-    public Figure(Board board, int[] coord){
-        this(" \u2011", "no color", board, coord);
-    }
-
     public Figure(String color, Board board, int[] coord){
         this(".", color, board, coord);
     }
@@ -31,10 +26,6 @@ public abstract class Figure {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
-    }
-
-    public Board getBoard() {
-        return board;
     }
 
     public int[] getCoordinate() {
@@ -53,7 +44,16 @@ public abstract class Figure {
         return type;
     }
 
-    public abstract void move(Board board, int[] startCoords, int[] endCoords);
+    public void move(Board board, int[] startCoords, int[] endCoords) {
+        boolean canMove = checkMoveValidity(board, startCoords, endCoords);
+        if (canMove){
+            int indexOfStart = board.getBoard().indexOf(board.selectFigure(startCoords));
+            int indexOfEnd = board.getBoard().indexOf(board.selectFigure(endCoords));
+            board.getBoard().set(indexOfEnd, this);
+            this.setCoordinate(endCoords);
+            board.getBoard().set(indexOfStart, new Empty(board, startCoords));
+        } else System.out.println("Couldn't move figure. Something went wrong. Try again.");
+    }
 
     public abstract boolean checkMoveValidity(Board board, int[] startCoords, int[] endCoords);
 }

@@ -17,18 +17,6 @@ public class Knight extends Chess.Figures.Figure {
     }
 
     @Override
-    public void move(Board board, int[] startCoords, int[] endCoords) {
-        boolean moveIsValid = checkMoveValidity(board, startCoords, endCoords);
-        if (moveIsValid){
-            int startIndex = board.getBoard().indexOf(board.selectFigure(startCoords));
-            int endIndex = board.getBoard().indexOf(board.selectFigure(endCoords));
-            board.getBoard().set(endIndex, this);
-            this.setCoordinate(endCoords);
-            board.getBoard().set(startIndex, new Empty(board, startCoords));
-        } else System.out.println("End coords may not be valid. Try something else.");
-    }
-
-    @Override
     public boolean checkMoveValidity(Board board, int[] startCoords, int[] endCoords) {
         if (endCoords[0] < 0 || endCoords[0] > 7 || endCoords[1] < 0 || endCoords[1] > 7){
             System.out.println("End index out of range. Pick something that's on the board.");
